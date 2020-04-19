@@ -187,7 +187,6 @@ UdpSocket.prototype.send = function(buffer, offset, length, port, address, callb
   callback = callback || noop
   let str
   if (typeof buffer === 'string') {
-    console.warn('socket.send(): interpreting as base64')
     str = buffer
   } else if (typeof Buffer !== 'undefined' && Buffer.isBuffer(buffer)) {
     str = buffer.toString('base64')
