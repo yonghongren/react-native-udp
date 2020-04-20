@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RejectedExecutionException;
+import android.util.Log;
 
 /**
  * The NativeModule in charge of storing active {@link UdpSocketClient}s, and acting as an api layer.
@@ -250,7 +252,9 @@ public final class UdpSockets extends ReactContextBaseJavaModule
                     client.send(base64String, port, address, callback);
                 } catch (IllegalStateException ise) {
                     callback.invoke(UdpErrorUtil.getError(null, ise.getMessage()));
-                }catch (UnknownHostException uhe) {
+                } catch(RejectedExecutionException rejected) {
+                    callback.invoke(UdpErrorUtil.getError(null, rejected.getMessage()));
+                } catch (UnknownHostException uhe) {
                     callback.invoke(UdpErrorUtil.getError(null, uhe.getMessage()));
                 } catch (IOException ioe) {
                     // an exception occurred
